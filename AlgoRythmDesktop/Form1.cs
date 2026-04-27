@@ -185,15 +185,27 @@ namespace AlgoRythmDesktop
         {
             // Array Input
             arrayInputTextBox = new TextBox();
-            arrayInputTextBox.PlaceholderText = "Введите числа через запятую (например: 5,3,8,1,9,2)";
+            arrayInputTextBox.Text = "Введите числа через запятую (например: 5,3,8,1,9,2)";
+            arrayInputTextBox.ForeColor = Color.Gray;
             arrayInputTextBox.Location = new Point(10, 10);
             arrayInputTextBox.Size = new Size(250, 25);
             arrayInputTextBox.BackColor = ColorTranslator.FromHtml("#1E1E2E");
-            arrayInputTextBox.ForeColor = TextPrimaryColor;
             arrayInputTextBox.BorderStyle = BorderStyle.FixedSingle;
             arrayInputTextBox.Font = BodyFont;
-            arrayInputTextBox.GotFocus += (s, e) => arrayInputTextBox.BorderStyle = BorderStyle.FixedSingle;
-            arrayInputTextBox.LostFocus += (s, e) => arrayInputTextBox.BorderStyle = BorderStyle.FixedSingle;
+            
+            // Placeholder logic for .NET Framework
+            arrayInputTextBox.Enter += (s, e) => {
+                if (arrayInputTextBox.Text == "Введите числа через запятую (например: 5,3,8,1,9,2)") {
+                    arrayInputTextBox.Text = "";
+                    arrayInputTextBox.ForeColor = TextPrimaryColor;
+                }
+            };
+            arrayInputTextBox.Leave += (s, e) => {
+                if (string.IsNullOrWhiteSpace(arrayInputTextBox.Text)) {
+                    arrayInputTextBox.Text = "Введите числа через запятую (например: 5,3,8,1,9,2)";
+                    arrayInputTextBox.ForeColor = Color.Gray;
+                }
+            };
             topControlsPanel.Controls.Add(arrayInputTextBox);
 
             randomArrayButton = new CustomButton("Случайный");
@@ -340,7 +352,7 @@ namespace AlgoRythmDesktop
                 // For search algorithms, prompt for search value
                 if (currentAlgorithm is LinearSearch || currentAlgorithm is BinarySearch)
                 {
-                    string input = Microsoft.VisualBasic.Interaction.InputBox("Введите значение для поиска:", "Значение для поиска", "");
+                    string input = Interaction.InputBox("Введите значение для поиска:", "Значение для поиска", "");
                     if (int.TryParse(input, out int searchVal))
                     {
                         searchValue = searchVal;
@@ -348,6 +360,7 @@ namespace AlgoRythmDesktop
                     }
                     else
                     {
+                        if (string.IsNullOrEmpty(input)) return; // User cancelled
                         ShowErrorMessage("Некорректное значение для поиска.");
                         return;
                     }
@@ -389,7 +402,7 @@ namespace AlgoRythmDesktop
                     // For search algorithms, prompt for search value
                     if (currentAlgorithm is LinearSearch || currentAlgorithm is BinarySearch)
                     {
-                        string input = Microsoft.VisualBasic.Interaction.InputBox("Введите значение для поиска:", "Значение для поиска", "");
+                        string input = Interaction.InputBox("Введите значение для поиска:", "Значение для поиска", "");
                         if (int.TryParse(input, out int searchVal))
                         {
                             searchValue = searchVal;
@@ -397,6 +410,7 @@ namespace AlgoRythmDesktop
                         }
                         else
                         {
+                            if (string.IsNullOrEmpty(input)) return; // User cancelled
                             ShowErrorMessage("Некорректное значение для поиска.");
                             return;
                         }
