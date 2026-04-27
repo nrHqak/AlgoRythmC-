@@ -87,8 +87,8 @@ namespace AlgoRythmDesktop
 
             InitializeCustomTitleBar();
             InitializeLayoutPanels();
-            InitializeControls();
             InitializeAlgorithms();
+            InitializeControls();
             ResetApplication();
         }
 
@@ -547,6 +547,48 @@ namespace AlgoRythmDesktop
             }
             arrayInputTextBox.Text = string.Join(", ", randomArray);
             ResetApplication();
+        }
+
+        private void InitializeAlgorithms()
+        {
+            algorithms = new List<Algorithm>
+            {
+                new BubbleSort(),
+                new SelectionSort(),
+                new InsertionSort(),
+                new LinearSearch(),
+                new BinarySearch()
+            };
+        }
+
+        private void ResetApplication()
+        {
+            animationTimer?.Stop();
+            isRunning = false;
+            currentTrace = null;
+            currentStepIndex = 0;
+            searchValue = 0;
+
+            if (algorithmComboBox != null && algorithmComboBox.SelectedIndex >= 0 && algorithms != null)
+            {
+                currentAlgorithm = algorithms[algorithmComboBox.SelectedIndex];
+                UpdateAlgorithmInfo();
+            }
+
+            logListBox?.Items.Clear();
+            stepsLabel.Text = "Шагов: 0/0";
+            startButton.Enabled = true;
+            stepButton.Enabled = true;
+            stopButton.Enabled = false;
+            visualizationPictureBox?.Invalidate();
+        }
+
+        private void SpeedTrackBar_ValueChanged(object sender, EventArgs e)
+        {
+            if (animationTimer != null)
+            {
+                animationTimer.Interval = speedTrackBar.Value;
+            }
         }
 
         private void LogStep(TraceStep step)
