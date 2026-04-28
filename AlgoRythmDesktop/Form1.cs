@@ -68,6 +68,9 @@ namespace AlgoRythmDesktop
         private Label complexityLabel;
         private Label stepsLabel;
 
+        private const int ControlsPadding = 10;
+        private const int ControlsSpacing = 10;
+
         // Algorithm related
         private List<Algorithm> algorithms;
         private Algorithm currentAlgorithm;
@@ -158,6 +161,7 @@ namespace AlgoRythmDesktop
             topControlsPanel.Height = 100;
             topControlsPanel.BackColor = PanelColor;
             topControlsPanel.Padding = new Padding(10);
+            topControlsPanel.Resize += (s, e) => LayoutTopControls();
             mainPanel.Controls.Add(topControlsPanel);
 
             hintPanel = new Panel();
@@ -265,6 +269,8 @@ namespace AlgoRythmDesktop
             resetButton.Click += ResetButton_Click;
             topControlsPanel.Controls.Add(resetButton);
 
+            LayoutTopControls();
+
             // Visualization
             visualizationPictureBox = new PictureBox();
             visualizationPictureBox.Dock = DockStyle.Fill;
@@ -320,6 +326,38 @@ namespace AlgoRythmDesktop
             if (algorithmComboBox.Items.Count > 0)
             {
                 algorithmComboBox.SelectedIndex = 0;
+            }
+        }
+
+        private void LayoutTopControls()
+        {
+            int x = ControlsPadding;
+            int y = ControlsPadding;
+
+            int availableWidth = Math.Max(420, topControlsPanel.ClientSize.Width - (ControlsPadding * 2));
+            int inputWidth = Math.Min(430, Math.Max(220, availableWidth - randomArrayButton.Width - ControlsSpacing));
+            arrayInputTextBox.Location = new Point(x, y);
+            arrayInputTextBox.Width = inputWidth;
+
+            randomArrayButton.Location = new Point(arrayInputTextBox.Right + ControlsSpacing, y);
+
+            y = arrayInputTextBox.Bottom + ControlsSpacing;
+            algorithmComboBox.Location = new Point(x, y);
+
+            speedLabel.Location = new Point(algorithmComboBox.Right + 15, y + 3);
+            speedTrackBar.Location = new Point(speedLabel.Right + 8, y - 3);
+            speedTrackBar.Width = Math.Min(220, Math.Max(120, topControlsPanel.ClientSize.Width - speedTrackBar.Left - ControlsPadding));
+
+            y = Math.Max(algorithmComboBox.Bottom, speedTrackBar.Bottom) + ControlsSpacing;
+            startButton.Location = new Point(x, y);
+            stepButton.Location = new Point(startButton.Right + ControlsSpacing, y);
+            stopButton.Location = new Point(stepButton.Right + ControlsSpacing, y);
+            resetButton.Location = new Point(stopButton.Right + ControlsSpacing, y);
+
+            int requiredHeight = resetButton.Bottom + ControlsPadding;
+            if (topControlsPanel.Height != requiredHeight)
+            {
+                topControlsPanel.Height = requiredHeight;
             }
         }
 
