@@ -161,7 +161,6 @@ namespace AlgoRythmDesktop
             topControlsPanel.Height = 100;
             topControlsPanel.BackColor = PanelColor;
             topControlsPanel.Padding = new Padding(10);
-            topControlsPanel.Resize += (s, e) => LayoutTopControls();
             mainPanel.Controls.Add(topControlsPanel);
 
             hintPanel = new Panel();
@@ -269,6 +268,7 @@ namespace AlgoRythmDesktop
             resetButton.Click += ResetButton_Click;
             topControlsPanel.Controls.Add(resetButton);
 
+            topControlsPanel.Resize += (s, e) => LayoutTopControls();
             LayoutTopControls();
 
             // Visualization
@@ -331,6 +331,20 @@ namespace AlgoRythmDesktop
 
         private void LayoutTopControls()
         {
+            if (topControlsPanel == null ||
+                arrayInputTextBox == null ||
+                randomArrayButton == null ||
+                algorithmComboBox == null ||
+                speedLabel == null ||
+                speedTrackBar == null ||
+                startButton == null ||
+                stepButton == null ||
+                stopButton == null ||
+                resetButton == null)
+            {
+                return;
+            }
+
             int x = ControlsPadding;
             int y = ControlsPadding;
 
